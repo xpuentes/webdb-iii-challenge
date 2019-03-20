@@ -39,5 +39,25 @@ server.get('/api/cohorts/:id', (req, res) => {
     });
 });
 
+server.get('/api/cohorts/:id/students', (req, res) => {
+  const { id } = req.params;
+
+  db('cohorts')
+    .join('students', 'cohorts.id', 'students.cohort_id')
+    .select('students.name as Student', 'cohorts.name as Cohort')
+    .where('students.cohort_id', id)
+    .first()
+    .then(cohorts => {
+      if(cohorts){
+        res.status(200).json(cohorts);
+      } else {
+        res.status(400).json({message: 'Cohort does not exist.'})
+      }
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Error loading data'});
+    });
+});
+
 const port = process.env.PORT || 9090;
 server.listen(port, () => console.log(`\nrunning on ${port}\n`));
