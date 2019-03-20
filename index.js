@@ -46,7 +46,6 @@ server.get('/api/cohorts/:id/students', (req, res) => {
     .join('students', 'cohorts.id', 'students.cohort_id')
     .select('students.name as Student', 'cohorts.name as Cohort')
     .where('students.cohort_id', id)
-    .first()
     .then(cohorts => {
       if(cohorts){
         res.status(200).json(cohorts);
