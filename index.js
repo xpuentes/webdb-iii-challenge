@@ -59,5 +59,18 @@ server.get('/api/cohorts/:id/students', (req, res) => {
     });
 });
 
+server.post('/api/cohorts', (req, res) => {
+  const name = req.body;
+
+  db.insert(name)
+    .into('cohorts')
+    .then(id => {
+      res.status(201).json(id);
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Unable to add new cohort.'});
+    });
+});
+
 const port = process.env.PORT || 9090;
 server.listen(port, () => console.log(`\nrunning on ${port}\n`));
