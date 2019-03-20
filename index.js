@@ -71,5 +71,34 @@ server.post('/api/cohorts', (req, res) => {
     });
 });
 
+server.put('/api/cohorts/:id', (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  db('cohorts')
+    .where({id: id})
+    .update({name})
+    .then(count => {
+      res.status(200).json(count);
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Unable to update.'})
+    });
+});
+
+server.delete('/api/cohorts/:id', (req, res) => {
+  const { id } = req.params;
+
+  db('cohorts')
+    .where({id: id})
+    .del()
+    .then(count => {
+      res.status(200).json(count);
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Unable to delete record.'});
+    });
+});
+
 const port = process.env.PORT || 9090;
 server.listen(port, () => console.log(`\nrunning on ${port}\n`));
